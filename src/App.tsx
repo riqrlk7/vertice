@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { Layers, Calendar, Cpu } from 'lucide-react';
 import logo from './assets/logo.png';
 
 // Interfaces
@@ -35,34 +34,38 @@ interface ExecChapter {
   outcome: string;
 }
 
+interface ExpertDossier {
+  id: string;
+  name: string;
+  status: string;
+  area: string;
+  validation: string;
+  directive: string;
+}
+
+interface OperationalFile {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+}
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState<'processos' | 'cronograma' | 'execucao'>('processos');
+  const [activeSection, setActiveSection] = useState<'processos' | 'cronograma' | 'execucao' | 'experts' | 'arquivos'>('processos');
 
   // References for scroll linked navigation and blur reveals
   const mainRef = useRef<HTMLDivElement>(null);
   const section1Ref = useRef<HTMLDivElement>(null);
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
+  const section4Ref = useRef<HTMLDivElement>(null);
+  const section5Ref = useRef<HTMLDivElement>(null);
   
   const [section1InView, setSection1InView] = useState(false);
   const [section2InView, setSection2InView] = useState(false);
   const [section3InView, setSection3InView] = useState(false);
-
-  // Mouse spotlight coordinates
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (mainRef.current) {
-        const rect = mainRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        mainRef.current.style.setProperty('--mouse-x', `${x}px`);
-        mainRef.current.style.setProperty('--mouse-y', `${y}px`);
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const [section4InView, setSection4InView] = useState(false);
+  const [section5InView, setSection5InView] = useState(false);
 
   // Section observer to trigger sidebar active state and blur reveals
   useEffect(() => {
@@ -79,6 +82,12 @@ export default function App() {
             } else if (entry.target.id === 'execucao') {
               setActiveSection('execucao');
               setSection3InView(true);
+            } else if (entry.target.id === 'experts') {
+              setActiveSection('experts');
+              setSection4InView(true);
+            } else if (entry.target.id === 'arquivos') {
+              setActiveSection('arquivos');
+              setSection5InView(true);
             }
           } else {
             if (entry.target.id === 'processos') {
@@ -87,12 +96,16 @@ export default function App() {
               setSection2InView(false);
             } else if (entry.target.id === 'execucao') {
               setSection3InView(false);
+            } else if (entry.target.id === 'experts') {
+              setSection4InView(false);
+            } else if (entry.target.id === 'arquivos') {
+              setSection5InView(false);
             }
           }
         });
       },
       {
-        rootMargin: '-20% 0px -40% 0px',
+        rootMargin: '-30% 0px -50% 0px',
         threshold: 0.05,
       }
     );
@@ -100,19 +113,25 @@ export default function App() {
     const s1 = section1Ref.current;
     const s2 = section2Ref.current;
     const s3 = section3Ref.current;
+    const s4 = section4Ref.current;
+    const s5 = section5Ref.current;
 
     if (s1) sectionObserver.observe(s1);
     if (s2) sectionObserver.observe(s2);
     if (s3) sectionObserver.observe(s3);
+    if (s4) sectionObserver.observe(s4);
+    if (s5) sectionObserver.observe(s5);
 
     return () => {
       if (s1) sectionObserver.unobserve(s1);
       if (s2) sectionObserver.unobserve(s2);
       if (s3) sectionObserver.unobserve(s3);
+      if (s4) sectionObserver.unobserve(s4);
+      if (s5) sectionObserver.unobserve(s5);
     };
   }, []);
 
-  const scrollToSection = (id: 'processos' | 'cronograma' | 'execucao') => {
+  const scrollToSection = (id: 'processos' | 'cronograma' | 'execucao' | 'experts' | 'arquivos') => {
     const target = document.getElementById(id);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -137,7 +156,7 @@ export default function App() {
         "disponibilidade",
         "se aceita direção"
       ],
-      warning: "Aqui vocês decidem se vale entrar ou não."
+      warning: "Aqui decidimos se vale entrar ou não."
     },
     {
       id: "ch-2",
@@ -153,7 +172,7 @@ export default function App() {
         "o nicho permite comunidade?",
         "existe diferencial claro?"
       ],
-      warning: "Se não tiver isso, não entra."
+      warning: "Sem isso, a operação não avança."
     },
     {
       id: "ch-3",
@@ -170,7 +189,7 @@ export default function App() {
         "rotina de calls",
         "responsabilidades"
       ],
-      warning: "Tudo documentado."
+      warning: "Tudo documentado estaticamente."
     },
     {
       id: "ch-4",
@@ -181,7 +200,7 @@ export default function App() {
         "quem ele é no mercado",
         "qual promessa central",
         "para quem ele fala",
-        "qual inimigo/comum que ele combate",
+        "qual inimigo comum que ele combate",
         "qual narrativa",
         "qual percepção queremos construir"
       ],
@@ -230,7 +249,7 @@ export default function App() {
         "conteúdo de oferta",
         "CTA para grupo / aplicação"
       ],
-      warning: "O expert precisa executar."
+      warning: "O expert precisa executar rígido."
     },
     {
       id: "ch-8",
@@ -248,7 +267,7 @@ export default function App() {
       id: "ch-9",
       num: "09",
       title: "Entrega e retenção",
-      intro: "Aqui vocês precisam ser fortes:",
+      intro: "Onde reside a força da Vértice:",
       bullets: [
         "calendário fixo",
         "onboarding",
@@ -304,7 +323,7 @@ export default function App() {
         "responsabilidades",
         "contrato"
       ],
-      outcome: "decidir: “vamos construir isso?”",
+      outcome: "decidir se vamos construir isso.",
       active: true
     },
     {
@@ -333,7 +352,7 @@ export default function App() {
         "domínio",
         "identidade"
       ],
-      outcome: "o expert começa parecer: marca.",
+      outcome: "o expert começa a parecer uma marca de status.",
       active: true
     },
     {
@@ -357,7 +376,7 @@ export default function App() {
         "observar comentários",
         "identificar linguagem do público"
       ],
-      outcome: "começar gerar: leads, atenção e percepção.",
+      outcome: "geração contínua de leads, atenção e percepção.",
       active: false
     },
     {
@@ -371,7 +390,7 @@ export default function App() {
         "aula premium",
         "grupo fechado",
         "experiência curta",
-        "NÃO: mentoria gigante ainda"
+        "sem mentoria gigante ainda"
       ],
       deliverablesTitle: "Meta",
       deliverables: [
@@ -388,7 +407,7 @@ export default function App() {
       id: "p-5",
       phaseLabel: "FASE 5 — ENTREGA & PROVA",
       title: "Semana 6",
-      objective: "transformar alunos em: prova, comunidade, defensores.",
+      objective: "transformar alunos em prova e comunidade.",
       actions: [
         "onboarding forte",
         "suporte próximo",
@@ -432,13 +451,13 @@ export default function App() {
       id: "p-7",
       phaseLabel: "FASE 7 — ESCALA",
       title: "Após 60~90 dias",
-      objective: "Só agora: tráfego, escala, automação, equipe, vendas maiores, tickets altos, recorrência forte.",
+      objective: "Tráfego, escala, automação, equipe, vendas maiores.",
       actions: [
         "tráfego pago em escala",
         "automação de funis de e-mail/DM",
         "equipe comercial ativa",
         "vendas de ticket alto",
-        "recorrência consolidada"
+        "recorrência de alta fidelidade"
       ],
       deliverablesTitle: "Engenharia",
       deliverables: [
@@ -463,7 +482,7 @@ export default function App() {
         { label: "Análise prática", items: ["Instagram", "conteúdo", "comentários", "percepção", "ticket atual", "comunicação", "autoridade", "energia da marca"] },
         { label: "Documento", items: ["criar um “Raio-X Operacional”"] }
       ],
-      outcome: "decisão: entra ou não entra."
+      outcome: "decisão absoluta: entra ou não entra."
     },
     {
       num: "02",
@@ -562,39 +581,75 @@ export default function App() {
     }
   ];
 
+  // Experts dossiers (Dossiês de experts)
+  const expertDossiers: ExpertDossier[] = [
+    {
+      id: "EXP-01",
+      name: "Giovanna Borja",
+      status: "Em validação ativa",
+      area: "Grooming de elite & Experiência física premium",
+      validation: "Mensagem discursiva validada. Bio, identidade estética e esteira de produtos de entrada (workshop/aula premium) desenhadas.",
+      directive: "Foco no alinhamento do Borja Academy. Transição da imagem artística pessoal para infraestrutura empresarial escalável."
+    },
+    {
+      id: "EXP-02",
+      name: "Confidencial // E-02",
+      status: "Alinhamento estratégico",
+      area: "Engenharia Comercial & Vendas de Alto Ticket",
+      validation: "Estruturação de funil de aplicação em andamento. Mapeamento de audiência real.",
+      directive: "Definição de modelo de participação societária estrita. Construção do cockpit operacional."
+    },
+    {
+      id: "EXP-03",
+      name: "Confidencial // E-03",
+      status: "Diagnóstico inicial",
+      area: "Medicina Integrativa & Saúde de Alta Performance",
+      validation: "Raio-X operacional iniciado. Avaliação de nível de comprometimento do expert.",
+      directive: "Identificação de gargalos de rotina. Avaliação se o expert aceita direção operacional pura."
+    }
+  ];
+
+  // Operational Archives (Acervo Operacional)
+  const operationalFiles: OperationalFile[] = [
+    {
+      id: "DOC-01",
+      title: "Diretiva de Status & Posicionamento Editorial // V01",
+      description: "Protocolo técnico para construção de percepção de autoridade inacessível. Diretrizes de comunicação, design minimalista e tom de voz institucional para marcas de elite.",
+      category: "Estratégia"
+    },
+    {
+      id: "DOC-02",
+      title: "Protocolo de Qualificação de Leads (Funil de DM) // V02",
+      description: "Manual de perguntas de triagem e fluxo comercial para filtrar leads no Instagram Direct. Regras estritas para agendamento de chamadas apenas com perfis de altíssima aderência.",
+      category: "Comercial"
+    },
+    {
+      id: "DOC-03",
+      title: "Matriz de Escada de Valor & Esteira Sequencial // V01",
+      description: "Desenho padrão para precificação de produtos de entrada (workshops), produto principal (mentoria) e recorrência premium (mastermind presencial).",
+      category: "Produto"
+    },
+    {
+      id: "DOC-04",
+      title: "Raio-X Operacional Padronizado (Admissão) // V03",
+      description: "Questionário técnico confidencial para auditoria completa de experts antes do contrato de parceria estratégica.",
+      category: "Admissão"
+    }
+  ];
+
   return (
     <div className="vertice-shell" ref={mainRef}>
-      {/* Background static and dynamic overlays */}
+      {/* Background static overlays */}
       <div className="cinematic-noise"></div>
       <div className="bg-grid"></div>
       <div className="ambient-glow"></div>
-      
-      {/* Spotlight dynamic mouse element */}
-      <div 
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(0, 82, 255, 0.015) 0%, transparent 100%)',
-          pointerEvents: 'none',
-          zIndex: 2
-        }}
-      ></div>
-
-      {/* Scan technical light */}
-      <div className="scan-light"></div>
-      
-      {/* Operational energy line */}
-      <div className="operational-energy-line"></div>
+      <img src={logo} alt="" className="bg-watermark-logo" />
 
       {/* Ultra Minimal Sidebar */}
       <aside className="sidebar">
         <div className="brand-section">
-          <div className="logo-container">
-            <svg className="logo-icon-svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-            <span className="brand-title">VÉRTICE</span>
-          </div>
+          <span className="brand-name">Vértice</span>
+          <span className="brand-tagline">Acervo Operacional</span>
         </div>
 
         <nav className="nav-menu">
@@ -602,30 +657,41 @@ export default function App() {
             onClick={() => scrollToSection('processos')} 
             className={`nav-item ${activeSection === 'processos' ? 'active' : ''}`}
           >
-            <Layers className="nav-item-icon" />
-            <span>Processos</span>
+            Processos
           </button>
           
           <button 
             onClick={() => scrollToSection('cronograma')} 
             className={`nav-item ${activeSection === 'cronograma' ? 'active' : ''}`}
           >
-            <Calendar className="nav-item-icon" />
-            <span>Cronograma</span>
+            Cronograma
           </button>
 
           <button 
             onClick={() => scrollToSection('execucao')} 
             className={`nav-item ${activeSection === 'execucao' ? 'active' : ''}`}
           >
-            <Cpu className="nav-item-icon" />
-            <span>Execução</span>
+            Execução
+          </button>
+
+          <button 
+            onClick={() => scrollToSection('experts')} 
+            className={`nav-item ${activeSection === 'experts' ? 'active' : ''}`}
+          >
+            Experts
+          </button>
+
+          <button 
+            onClick={() => scrollToSection('arquivos')} 
+            className={`nav-item ${activeSection === 'arquivos' ? 'active' : ''}`}
+          >
+            Arquivos
           </button>
         </nav>
 
         <div className="sidebar-footer">
-          VÉRTICE_SYS // V0.1<br />
-          INFRASTRUCTURE ONLINE
+          VÉRTICE_SYS<br />
+          Internal Operational Infrastructure
         </div>
       </aside>
 
@@ -634,96 +700,14 @@ export default function App() {
         
         {/* Editorial Strategic Hero */}
         <header className="doctrine-hero">
-          <div className="hero-left">
-            <span className="doctrine-label">Doutrina Operacional // V01</span>
-            <h1 className="doctrine-hero-title">
-              <span className="break-line">Estrutura</span>
-              <span className="break-line">antes</span>
-              <span className="escala-glow">de escala.</span>
-            </h1>
-            <p className="doctrine-hero-subtext">
-              A VÉRTICE estrutura operações digitais para experts, marcas pessoais e co-produtores que precisam transformar audiência em uma empresa previsível.
-            </p>
-            
-            <a href="#aplicar" className="cta-button-minimal">
-              [ Aplicar para a VÉRTICE ]
-            </a>
-
-            <div className="signature-micro-copy">
-              <span className="pulse-green"></span>
-              VÉRTICE_SYS // OPERATIONAL STRUCTURE ONLINE
-            </div>
-          </div>
-
-          <div className="hero-right">
-            <div className="logo-blur-wrapper">
-              <div className="logo-blur-backdrop"></div>
-              <img src={logo} className="giant-logo-glow" alt="Vértice Breathing System Logo" />
-            </div>
-          </div>
+          <span className="doctrine-label">Doutrina Operacional // V01</span>
+          <h1 className="doctrine-hero-title">
+            Estrutura antes<br />de <strong>escala.</strong>
+          </h1>
+          <p className="doctrine-hero-subtext">
+            Infraestrutura operacional para experts e marcas pessoais.
+          </p>
         </header>
-
-        {/* SECTION: O QUE FAZEMOS */}
-        <section className="doctrine-section in-view">
-          <div className="section-divider"></div>
-          <div className="section-header-editorial">
-            <span className="section-index">Arquivo 00 // O que fazemos</span>
-            <h2 className="section-title-editorial">O que fazemos.</h2>
-            <p style={{ fontSize: '18px', lineHeight: '1.8', color: 'var(--text-primary)', marginTop: '24px', fontWeight: 300, maxWidth: '780px' }}>
-              Não vendemos lançamentos. Estruturamos: <strong>produto</strong>, <strong>comercial</strong>, <strong>posicionamento</strong> e <strong>operação</strong>. Para que experts consigam crescer sem depender de improviso.
-            </p>
-          </div>
-
-          <div className="operational-blocks-grid">
-            <div className="operational-card">
-              <span className="card-num">SYS_LAYER // 01</span>
-              <h3 className="card-title">Estrutura Comercial</h3>
-              <p className="card-text">
-                Processos de vendas, aplicação de qualificação, integrações com CRM, funis estratégicos de aquisição direta e operação comercial automatizada.
-              </p>
-            </div>
-
-            <div className="operational-card">
-              <span className="card-num">SYS_LAYER // 02</span>
-              <h3 className="card-title">Produtos & Posicionamento</h3>
-              <p className="card-text">
-                Construção estratégica de ofertas de alta conversão, esteira sequencial (escada de produtos) e engenharia de posicionamento com percepção premium.
-              </p>
-            </div>
-
-            <div className="operational-card">
-              <span className="card-num">SYS_LAYER // 03</span>
-              <h3 className="card-title">Conteúdo & Distribuição</h3>
-              <p className="card-text">
-                Estratégia editorial direcionada para autoridade inquestionável, captação constante de leads qualificados e modelo de crescimento recorrente estático.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION: PARA QUEM CONSTRUÍMOS */}
-        <section className="doctrine-section in-view">
-          <div className="section-divider"></div>
-          <div className="section-header-editorial">
-            <span className="section-index">Arquivo 00 // Alvos operacionais</span>
-            <h2 className="section-title-editorial">Para quem construímos.</h2>
-          </div>
-
-          <div className="para-quem-grid">
-            <div className="para-quem-item">Experts</div>
-            <div className="para-quem-item">Marcas pessoais</div>
-            <div className="para-quem-item">Co-produtores</div>
-            <div className="para-quem-item">Operações digitais</div>
-          </div>
-
-          {/* Frase de Impacto */}
-          <div className="impact-quote-wrapper">
-            <blockquote className="impact-quote">
-              “O que parece crescimento na frente, normalmente é estrutura nos bastidores.”
-            </blockquote>
-            <span className="impact-quote-author">// VÉRTICE COCKPIT PROTOCOLS</span>
-          </div>
-        </section>
 
         {/* SECTION 1: PROCESSOS (A DOUTRINA) */}
         <section 
@@ -734,65 +718,34 @@ export default function App() {
           <div className="section-divider"></div>
           
           <div className="section-header-editorial">
-            <span className="section-index">Arquivo 01 // Processos</span>
+            <span className="section-index">Arquivo 01 // Acervo de Processos</span>
             <h2 className="section-title-editorial">A Linha de Produção Estratégica</h2>
+            <p className="section-description-editorial">
+              Cada etapa de admissão, validação e estruturação da Vértice segue protocolos estáticos rígidos de engenharia operacional.
+            </p>
           </div>
 
-          <div className="timeline-editorial">
+          <div className="editorial-process-list">
             {chapters.map((ch) => (
-              <div key={ch.id} className="chapter-editorial">
-                <span className="chapter-num">{ch.num}</span>
-                <span className="chapter-heading">{ch.title}</span>
-                <div className="chapter-body">
-                  {ch.intro && (
-                    <span 
-                      style={{ 
-                        fontFamily: 'var(--font-mono)', 
-                        fontSize: '9.5px', 
-                        color: 'var(--glow-blue-solid)', 
-                        textTransform: 'uppercase', 
-                        letterSpacing: '1px', 
-                        marginBottom: '10px', 
-                        display: 'block' 
-                      }}
-                    >
-                      {ch.intro}
-                    </span>
-                  )}
+              <div key={ch.id} className="editorial-process-block">
+                <span className="editorial-num">{ch.num}</span>
+                <div className="editorial-content">
+                  <span className="editorial-meta">// Protocolo {ch.num}</span>
+                  <h3 className="editorial-heading">{ch.title}</h3>
+                  {ch.intro && <p className="editorial-body">{ch.intro}</p>}
                   
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
+                  <ul className="editorial-bullets">
                     {ch.bullets.map((b, idx) => (
-                      <li 
-                        key={idx} 
-                        style={{ 
-                          fontSize: '13px', 
-                          color: 'var(--text-secondary)', 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          gap: '8px', 
-                          fontWeight: 300 
-                        }}
-                      >
-                        <span style={{ width: '3px', height: '3px', backgroundColor: 'var(--text-muted)', borderRadius: '50%' }}></span>
-                        {b}
+                      <li key={idx} className="editorial-bullet-item">
+                        <span className="editorial-bullet-dot"></span>
+                        <span>{b}</span>
                       </li>
                     ))}
                   </ul>
 
                   {ch.warning && (
-                    <div style={{ borderLeft: '1px solid var(--text-primary)', paddingLeft: '10px', marginTop: '12px' }}>
-                      <p 
-                        style={{ 
-                          fontSize: '11px', 
-                          fontFamily: 'var(--font-mono)', 
-                          color: 'var(--text-primary)', 
-                          textTransform: 'uppercase', 
-                          letterSpacing: '0.5px', 
-                          fontWeight: 500 
-                        }}
-                      >
-                        // {ch.warning}
-                      </p>
+                    <div className="editorial-warning">
+                      <p className="editorial-warning-text">// Diretiva: {ch.warning}</p>
                     </div>
                   )}
                 </div>
@@ -810,92 +763,78 @@ export default function App() {
           <div className="section-divider"></div>
 
           <div className="section-header-editorial">
-            <span className="section-index">Arquivo 02 // Cronograma</span>
+            <span className="section-index">Arquivo 02 // Cronograma Estratégico</span>
             <h2 className="section-title-editorial">Roadmap de Aço</h2>
+            <p className="section-description-editorial">
+              A linha de tempo operacional é dividida em blocos estanques de validação. Não passamos para a próxima etapa sem validar a anterior.
+            </p>
           </div>
 
-          <div className="roadmap-vertical">
+          <div className="strategic-roadmap">
             {phases.map((phase) => (
-              <div 
-                key={phase.id} 
-                className={`roadmap-phase ${phase.active ? 'active' : ''}`}
-              >
-                <div className="phase-header">
-                  <span className="phase-label">{phase.phaseLabel}</span>
-                  <h3 className="phase-title">{phase.title}</h3>
-                </div>
-
-                <div className="phase-grid">
-                  <div className="phase-cell">
-                    <span className="phase-cell-title">Objetivo</span>
-                    <p className="phase-cell-content" style={{ color: 'var(--text-primary)', fontWeight: 500 }}>
+              <div key={phase.id} className="strategic-block">
+                <span className="strategic-week-label">{phase.phaseLabel}</span>
+                <h3 className="strategic-phase-title">{phase.title}</h3>
+                
+                <div className="strategic-phase-grid">
+                  <div className="strategic-phase-cell">
+                    <span className="strategic-cell-title">Objetivo</span>
+                    <p className="strategic-cell-content" style={{ fontWeight: 400, color: 'var(--text-primary)' }}>
                       {phase.objective}
                     </p>
                   </div>
                   
-                  <div className="phase-cell">
-                    <span className="phase-cell-title">Fazer / Ações</span>
-                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <div className="strategic-phase-cell">
+                    <span className="strategic-cell-title">Ações Operacionais</span>
+                    <ul className="strategic-cell-list">
                       {phase.actions.map((act, idx) => (
-                        <li key={idx} style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 300 }}>
-                          <span style={{ width: '3px', height: '3px', backgroundColor: 'var(--text-muted)', borderRadius: '50%' }}></span>
-                          {act}
+                        <li key={idx} className="strategic-cell-list-item">
+                          <span className="strategic-cell-list-dot"></span>
+                          <span>{act}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="phase-cell">
-                    <span className="phase-cell-title">{phase.deliverablesTitle}</span>
-                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <div className="strategic-phase-cell">
+                    <span className="strategic-cell-title">Entregas Técnicas</span>
+                    <ul className="strategic-cell-list">
                       {phase.deliverables.map((del, idx) => (
-                        <li key={idx} style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 300 }}>
-                          <span style={{ width: '3px', height: '3px', backgroundColor: 'var(--text-muted)', borderRadius: '50%' }}></span>
-                          {del}
+                        <li key={idx} className="strategic-cell-list-item">
+                          <span className="strategic-cell-list-dot"></span>
+                          <span>{del}</span>
                         </li>
                       ))}
                     </ul>
-                    
-                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.02)', paddingTop: '8px', marginTop: '12px' }}>
-                      <span className="phase-cell-title" style={{ color: 'var(--text-primary)' }}>Resultado</span>
-                      <p className="phase-cell-content" style={{ color: 'var(--glow-blue-solid)', fontFamily: 'var(--font-mono)', fontSize: '11.5px', marginTop: '2px' }}>
-                        {phase.outcome}
-                      </p>
+                    <div style={{ marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.02)', paddingTop: '10px' }}>
+                      <span className="strategic-cell-title">Resultado</span>
+                      <p className="strategic-outcome">// {phase.outcome}</p>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
 
-            {/* Retro Retrospective strategic warning box */}
-            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '40px', marginTop: '80px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--glow-blue-solid)', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>
-                // DIAGNÓSTICO RETROSPECTIVO
-              </span>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>
-                O Erro Que Quebrou Vocês Antes
-              </h3>
-              <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-secondary)', marginBottom: '24px', fontWeight: 300 }}>
-                Vocês começaram pela mentoria. Sem: percepção forte, validação, produto menor, estrutura emocional e operação sólida. A nova Vértice precisa seguir um caminho de engenharia limpa:
+            {/* Strategic Retro Warning Box */}
+            <div className="strategic-retro-box">
+              <span className="doctrine-label">// Diagnóstico Retrospectivo</span>
+              <h3 className="strategic-retro-title">O Erro Histórico da Operação</h3>
+              <p className="strategic-retro-body">
+                Começar pela estruturação do produto final sem validação comercial, sem posicionamento estrito e sem percepção elitizada de marca é o caminho garantido para o colapso operacional. A nova doutrina Vértice exige engenharia reversa estrita:
               </p>
               
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-primary)', backgroundColor: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-color)', padding: '16px 20px', borderRadius: '4px' }}>
-                <span>PERCEPÇÃO</span>
-                <span style={{ color: 'var(--text-muted)' }}>→</span>
-                <span>COMUNIDADE</span>
-                <span style={{ color: 'var(--text-muted)' }}>→</span>
-                <span>VALIDAÇÃO</span>
-                <span style={{ color: 'var(--text-muted)' }}>→</span>
-                <span>ESTRUTURA</span>
-                <span style={{ color: 'var(--text-muted)' }}>→</span>
-                <span>ESCALA</span>
+              <div className="strategic-retro-pipeline">
+                <span className="strategic-pipeline-item">PERCEPÇÃO</span>
+                <span className="strategic-pipeline-arrow">→</span>
+                <span className="strategic-pipeline-item">COMUNIDADE</span>
+                <span className="strategic-pipeline-arrow">→</span>
+                <span className="strategic-pipeline-item">VALIDAÇÃO</span>
+                <span className="strategic-pipeline-arrow">→</span>
+                <span className="strategic-pipeline-item">ESTRUTURA</span>
+                <span className="strategic-pipeline-arrow">→</span>
+                <span className="strategic-pipeline-item">ESCALA</span>
               </div>
-              
-              <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginTop: '16px' }}>
-                // E não: “abre turma e vende.”
-              </p>
             </div>
-
           </div>
         </section>
 
@@ -908,33 +847,31 @@ export default function App() {
           <div className="section-divider"></div>
 
           <div className="section-header-editorial">
-            <span className="section-index">Arquivo 03 // Execução</span>
-            <h2 className="section-title-editorial">Protocolos de Execução</h2>
-            <p style={{ fontSize: '15px', lineHeight: '1.7', color: 'var(--text-secondary)', marginTop: '16px', fontWeight: 300, maxWidth: '780px' }}>
-              A diferença entre uma “ideia bonita” e uma “operação real” é a execução rígida. A Vértice opera sob rituais, processos padronizados e documentação técnica estática — a operação nunca deve depender do humor do expert.
+            <span className="section-index">Arquivo 03 // Protocolos de Execução</span>
+            <h2 className="section-title-editorial">Manual de Procedimentos Técnicos</h2>
+            <p className="section-description-editorial">
+              Rituais e metodologias estáticas para blindar a operação contra oscilações de humor ou interferências externas do expert.
             </p>
           </div>
 
-          <div className="timeline-editorial">
+          <div className="procedural-manual">
             {execChapters.map((ch) => (
-              <div key={ch.num} className="chapter-editorial">
-                <span className="chapter-num">{ch.num}</span>
-                <div>
-                  <span className="chapter-heading" style={{ display: 'block', marginBottom: '8px' }}>{ch.title}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--glow-blue-solid)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    Objetivo: {ch.objective}
-                  </span>
+              <div key={ch.num} className="procedure-block">
+                <div className="procedure-header">
+                  <div className="procedure-title-wrapper">
+                    <span className="procedure-num">{ch.num}</span>
+                    <h3 className="procedure-title">{ch.title}</h3>
+                  </div>
+                  <span className="procedure-objective">Objetivo: {ch.objective}</span>
                 </div>
-                <div className="chapter-body">
-                  {ch.steps.map((step, sIdx) => (
-                    <div key={sIdx} style={{ marginBottom: '12px' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '6px' }}>
-                        // {step.label}
-                      </span>
-                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        {step.items.map((item, iIdx) => (
-                          <li key={iIdx} style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 300 }}>
-                            <span style={{ width: '3px', height: '3px', backgroundColor: 'var(--text-muted)', borderRadius: '50%' }}></span>
+                
+                <div className="procedure-body">
+                  {ch.steps.map((step, idx) => (
+                    <div key={idx} className="procedure-step-section">
+                      <span className="procedure-step-label">// {step.label}</span>
+                      <ul className="procedure-step-list">
+                        {step.items.map((item, itemIdx) => (
+                          <li key={itemIdx} className="procedure-step-item">
                             {item}
                           </li>
                         ))}
@@ -942,64 +879,111 @@ export default function App() {
                     </div>
                   ))}
                   
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.02)', paddingTop: '8px', marginTop: '12px' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', color: 'var(--text-muted)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                      Resultado Esperado
-                    </span>
-                    <p style={{ fontSize: '13px', color: 'var(--glow-blue-solid)', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
-                      {ch.outcome}
-                    </p>
+                  <div className="procedure-outcome-box">
+                    <span className="procedure-outcome-title">Diretiva de Resultado</span>
+                    <p className="procedure-outcome-text">// {ch.outcome}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* O SEGREDO DA VÉRTICE strategic warning box */}
-          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '40px', marginTop: '80px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--glow-blue-solid)', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '16px' }}>
-              // COCKPIT OPERACIONAL
-            </span>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>
-              O Segredo da Vértice
-            </h3>
-            <p style={{ fontSize: '14px', lineHeight: '1.7', color: 'var(--text-secondary)', marginBottom: '24px', fontWeight: 300 }}>
-              A Vértice não deveria operar como uma agência tradicional. Ela deveria operar como uma infraestrutura estratégica de escala estática:
+          <div className="cockpit-dossier-box">
+            <span className="doctrine-label">// Cockpit Operacional</span>
+            <h3 className="cockpit-dossier-title">Infraestrutura Invisível</h3>
+            <p className="strategic-retro-body" style={{ marginBottom: '32px' }}>
+              A Vértice opera como uma camada técnica silenciosa. A reputação, a organização e o status comercial do expert são blindados e lapidados sob nossa tutela direta.
             </p>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', backgroundColor: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-color)', padding: '24px', borderRadius: '4px' }}>
-              <div>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                  Entrada do Expert
-                </span>
-                <p style={{ fontSize: '15px', color: 'var(--text-primary)', fontWeight: 400 }}>
-                  Desorganizado & Centralizado
-                </p>
+            <div className="cockpit-dossier-grid">
+              <div className="dossier-panel">
+                <span className="dossier-panel-label">Estado de Entrada do Expert</span>
+                <p className="dossier-panel-val">Desorganizado, Centralizador, Vulnerável ao humor</p>
               </div>
-              <div>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--glow-blue-solid)', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                  Saída do Expert
-                </span>
-                <p style={{ fontSize: '15px', color: 'var(--text-primary)', fontWeight: 400 }}>
-                  Operação & Infraestrutura de Status
-                </p>
+              <div className="dossier-panel">
+                <span className="dossier-panel-label">Estado sob Supervisão Vértice</span>
+                <p className="dossier-panel-val">Operação estática, Status inabalável, Escala blindada</p>
               </div>
             </div>
-            
-            <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginTop: '16px' }}>
-              // Ritual + Processo + Documentação Técnica Confidencial.
-            </p>
           </div>
         </section>
-        {/* Footer */}
-        <footer style={{ borderTop: '1px solid var(--border-color)', paddingTop: '40px', marginTop: '120px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)' }}>
-            VÉRTICE_SYS // BUILDING DIGITAL OPERATIONS
-          </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--glow-blue-light)' }}>
-            CONFIDENCIAL // V0.1
-          </span>
-        </footer>
+
+        {/* SECTION 4: EXPERTS (DOSSIÊS DE EXPERTS CONFIDENCIAIS) */}
+        <section 
+          id="experts" 
+          ref={section4Ref}
+          className={`doctrine-section ${section4InView ? 'in-view' : 'out-of-view'}`}
+        >
+          <div className="section-divider"></div>
+
+          <div className="section-header-editorial">
+            <span className="section-index">Arquivo 04 // Experts em Custódia</span>
+            <h2 className="section-title-editorial">Coorte de Operações Ativas</h2>
+            <p className="section-description-editorial">
+              Marcas pessoais e experts sob tutela estratégica da Vértice. O acesso e as informações contidas nestes dossiês são de natureza restrita.
+            </p>
+          </div>
+
+          <div className="experts-editorial-grid">
+            {expertDossiers.map((exp) => (
+              <div key={exp.id} className="expert-dossier-card">
+                <div className="expert-dossier-header">
+                  <span className="expert-id">{exp.id}</span>
+                  <span className="expert-status-tag">{exp.status}</span>
+                </div>
+                
+                <h3 className="expert-name">{exp.name}</h3>
+                
+                <div className="expert-details-list">
+                  <div className="expert-detail-item">
+                    <span className="expert-detail-label">Área de Atuação</span>
+                    <p className="expert-detail-value">{exp.area}</p>
+                  </div>
+                  <div className="expert-detail-item">
+                    <span className="expert-detail-label">Estado de Validação</span>
+                    <p className="expert-detail-value">{exp.validation}</p>
+                  </div>
+                  <div className="expert-detail-item">
+                    <span className="expert-detail-label">Diretiva Principal</span>
+                    <p className="expert-detail-value">{exp.directive}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION 5: ARQUIVOS (ACERVO TÉCNICO CONFIDENCIAL) */}
+        <section 
+          id="arquivos" 
+          ref={section5Ref}
+          className={`doctrine-section ${section5InView ? 'in-view' : 'out-of-view'}`}
+        >
+          <div className="section-divider"></div>
+
+          <div className="section-header-editorial">
+            <span className="section-index">Arquivo 05 // Acervo Técnico</span>
+            <h2 className="section-title-editorial">Inteligência Organizacional</h2>
+            <p className="section-description-editorial">
+              Diretivas internas, manuais práticos e memorandos operacionais estáticos para uso da equipe técnica Vértice.
+            </p>
+          </div>
+
+          <div className="archives-dossier-list">
+            {operationalFiles.map((file) => (
+              <div key={file.id} className="archive-file-row">
+                <span className="archive-file-id">{file.id}</span>
+                <div className="archive-file-meta-col">
+                  <h3 className="archive-file-title">{file.title}</h3>
+                  <p className="archive-file-desc">{file.description}</p>
+                </div>
+                <div className="archive-action-col">
+                  <span className="archive-badge">{file.category}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
       </main>
     </div>
