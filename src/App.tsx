@@ -35,31 +35,19 @@ interface ExecChapter {
   outcome: string;
 }
 
-interface ScriptBloco {
-  num: string;
-  time: string;
-  title: string;
-  subtext: string;
-  actions?: string[];
-  speeches?: { author: string; text: string }[];
-  questions?: string[];
-  insights?: string[];
-}
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState<'processos' | 'cronograma' | 'execucao' | 'giovanna'>('processos');
+  const [activeSection, setActiveSection] = useState<'processos' | 'cronograma' | 'execucao'>('processos');
 
   // References for scroll linked navigation and blur reveals
   const mainRef = useRef<HTMLDivElement>(null);
   const section1Ref = useRef<HTMLDivElement>(null);
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
-  const section4Ref = useRef<HTMLDivElement>(null);
   
   const [section1InView, setSection1InView] = useState(false);
   const [section2InView, setSection2InView] = useState(false);
   const [section3InView, setSection3InView] = useState(false);
-  const [section4InView, setSection4InView] = useState(false);
 
   // Mouse spotlight coordinates
   useEffect(() => {
@@ -91,9 +79,6 @@ export default function App() {
             } else if (entry.target.id === 'execucao') {
               setActiveSection('execucao');
               setSection3InView(true);
-            } else if (entry.target.id === 'giovanna') {
-              setActiveSection('giovanna');
-              setSection4InView(true);
             }
           } else {
             if (entry.target.id === 'processos') {
@@ -102,8 +87,6 @@ export default function App() {
               setSection2InView(false);
             } else if (entry.target.id === 'execucao') {
               setSection3InView(false);
-            } else if (entry.target.id === 'giovanna') {
-              setSection4InView(false);
             }
           }
         });
@@ -117,22 +100,19 @@ export default function App() {
     const s1 = section1Ref.current;
     const s2 = section2Ref.current;
     const s3 = section3Ref.current;
-    const s4 = section4Ref.current;
 
     if (s1) sectionObserver.observe(s1);
     if (s2) sectionObserver.observe(s2);
     if (s3) sectionObserver.observe(s3);
-    if (s4) sectionObserver.observe(s4);
 
     return () => {
       if (s1) sectionObserver.unobserve(s1);
       if (s2) sectionObserver.unobserve(s2);
       if (s3) sectionObserver.unobserve(s3);
-      if (s4) sectionObserver.unobserve(s4);
     };
   }, []);
 
-  const scrollToSection = (id: 'processos' | 'cronograma' | 'execucao' | 'giovanna') => {
+  const scrollToSection = (id: 'processos' | 'cronograma' | 'execucao') => {
     const target = document.getElementById(id);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -582,144 +562,6 @@ export default function App() {
     }
   ];
 
-  // Script Call Giovanna (Giovanna // 18/05)
-  const scriptBlocos: ScriptBloco[] = [
-    {
-      num: "I",
-      time: "0:00 → 0:10",
-      title: "Abertura",
-      subtext: "Começa leve. A intenção é ouvir e criar percepção de inteligência sem qualquer pressão comercial.",
-      actions: [
-        "Escuta ativa absoluta.",
-        "Não interrompe.",
-        "Não acelera.",
-        "Só deixa ela se expressar e desenvolver o fluxo."
-      ],
-      speeches: [
-        { author: "Você", text: "Giovana, muito bom falar com você. Aqui comigo tá o [nome do sócio], a gente trabalha junto estruturando operações digitais e marcas pessoais." },
-        { author: "Você", text: "Mas antes de qualquer coisa, a gente queria mais te ouvir mesmo." },
-        { author: "Você", text: "O que chamou atenção no teu perfil foi justamente que parece ter muito mais aí do que só grooming." },
-        { author: "Você", text: "Dá pra perceber uma construção de marca muito forte." },
-        { author: "Você", text: "Conta um pouco de você e do momento que vocês estão vivendo agora." }
-      ]
-    },
-    {
-      num: "II",
-      time: "0:10 → 0:25",
-      title: "História Dela",
-      subtext: "Aqui vocês investigam a fundo a trajetória, ambição, visão do mercado e sua autopercepção como marca.",
-      questions: [
-        "Como você entrou no grooming?",
-        "Teve um momento que você percebeu que começou virar referência?",
-        "O que mais te move hoje dentro disso?",
-        "Você sempre teve essa preocupação maior com estética, experiência e marca ou isso foi acontecendo naturalmente?",
-        "O que você sente que falta hoje no mercado groomer?",
-        "O que você vê que a maioria faz igual e você tenta fazer diferente?",
-        "O que você acha que fez as pessoas começarem enxergar valor no teu trabalho?",
-        "Hoje você se enxerga mais como groomer, empresária ou marca?",
-        "Você sente que tua imagem hoje representa o tamanho do que você construiu?",
-        "Ou sente que ainda existe muito potencial que as pessoas nem enxergaram direito?"
-      ],
-      insights: [
-        "Olhando o perfil dela dá pra perceber claramente: percepção premium, estética forte, autoridade natural, conexão emocional forte, presença feminina muito marcante no nicho e uma experiência física de atendimento muito bem elaborada."
-      ]
-    },
-    {
-      num: "III",
-      time: "0:25 → 0:45",
-      title: "Entender o que Existe Hoje",
-      subtext: "Investigar a estrutura física, equipe do Borja, cursos, operação comercial e o tamanho real de sua visão (sem parecer interrogatório).",
-      questions: [
-        "Como surgiu essa ideia dos cursos? Foi algo que já vinha da tua cabeça ou surgiu mais através da equipe?",
-        "Hoje isso ainda tá começando ou já existe uma estrutura mais organizada? Vocês já sabem exatamente o que querem construir?",
-        "Hoje quem cuida mais da parte estratégica e comercial? Você ainda centraliza muita coisa?",
-        "Você participa mais da criação ou da operação também? Hoje você sente que existe uma estrutura real por trás ou ainda muita coisa vai no fluxo?",
-        "Quando você pensa nisso daqui alguns anos, o que você imagina? Você pensa só em curso ou enxerga algo maior?",
-        "Já passou pela cabeça: comunidade, imersão, certificação, presencial, treinamento pra petshops?"
-      ],
-      insights: [
-        "Foco total em mapear a maturidade operacional dela e o nível de delegação da equipe."
-      ]
-    },
-    {
-      num: "IV",
-      time: "0:45 → 1:05",
-      title: "Devolver a Leitura de Vocês",
-      subtext: "Demonstrar visão e autoridade operacional profunda. Sem realizar pitches de venda.",
-      speeches: [
-        { author: "Você", text: "Uma coisa que chamou atenção no teu perfil é que você não passa sensação de alguém tentando vender curso. Você passa sensação de marca. E isso é raro no mercado groomer." },
-        { author: "Sócio", text: "A maioria das pessoas tenta crescer só fazendo conteúdo. Mas as que realmente crescem acabam virando operação. E honestamente… teu perfil parece muito mais próximo disso." }
-      ],
-      insights: [
-        "percepção premium",
-        "estética consistente",
-        "autoridade natural",
-        "conexão emocional forte",
-        "potencial muito forte pra presencial",
-        "potencial de comunidade",
-        "potencial empresarial",
-        "potencial pra treinamento de petshops",
-        "sensação de exclusividade estrutural"
-      ]
-    },
-    {
-      num: "V",
-      time: "1:05 → 1:20",
-      title: "Dor Operacional",
-      subtext: "Onde a oportunidade estratégica se consolida. Descobrir os gargalos da rotina dela.",
-      questions: [
-        "O que mais te desgasta hoje?",
-        "Onde você sente mais bagunça?",
-        "O que ainda depende muito de você?",
-        "O que você sente que ainda falta estrutura?",
-        "Você sente que tá construindo empresa ou ainda muito presa na rotina?",
-        "Hoje teu crescimento acompanha tua capacidade de organizar tudo?"
-      ],
-      speeches: [
-        { author: "Pergunta Forte", text: "Se tua audiência dobrasse amanhã… tua estrutura sustentaria?" }
-      ],
-      actions: [
-        "Fazer a pergunta forte e silenciar completamente. Deixar a gravidade do cenário assentar."
-      ]
-    },
-    {
-      num: "VI",
-      time: "1:20 → 1:40",
-      title: "Expandir a Visão Dela",
-      subtext: "Projetar a escala real de ecossistema que ela não consegue enxergar presa no operacional.",
-      insights: [
-        "Esteira de Produtos: workshop, formação, comunidade, assinatura, acompanhamento próximo, presencial, imersão, certificação, treinamento pra petshops."
-      ],
-      speeches: [
-        { author: "Sócio", text: "Uma coisa que a gente enxergou muito forte é teu potencial no mercado de petshops. Porque hoje muita empresa precisa de treinamento, experiência, posicionamento, padrão e equipe. E isso é algo que você naturalmente transmite. Isso sobe muito percepção e ticket." }
-      ]
-    },
-    {
-      num: "VII",
-      time: "1:40 → 1:50",
-      title: "Entender a Abertura Dela",
-      subtext: "Análise crucial de ego, maturidade e receptividade para receber direção estratégica.",
-      questions: [
-        "Você gosta de receber direção estratégica?",
-        "Você prefere construir algo sólido aos poucos ou acelerar?",
-        "O quanto você realmente quer transformar isso numa empresa?",
-        "Você gosta mais da parte artística ou da ideia de construir algo maior ao redor da tua marca?",
-        "Você sente vontade de deixar algo grande nesse mercado?"
-      ]
-    },
-    {
-      num: "VIII",
-      time: "1:50 → 2:00",
-      title: "Fechamento Leve",
-      subtext: "Terminar em alta sintonia intelectual. Sem propor negócios, sem valores, sem afobação.",
-      speeches: [
-        { author: "Você", text: "Pra ser sincero, essa conversa confirmou muito do que a gente já tinha sentido olhando teu perfil. Existe muita construção aí. E parece muito um momento de virada." },
-        { author: "Sócio", text: "E normalmente é exatamente nesses momentos que nasce algo realmente grande." },
-        { author: "Você", text: "A gente vai digerir tudo que você trouxe, entender melhor o cenário e depois conversa com mais clareza sobre próximos passos. Muito obrigado pela conversa. Foi boa de verdade." }
-      ]
-    }
-  ];
-
   return (
     <div className="vertice-shell" ref={mainRef}>
       {/* Background static and dynamic overlays */}
@@ -766,12 +608,7 @@ export default function App() {
             Execução
           </button>
 
-          <button 
-            onClick={() => scrollToSection('giovanna')} 
-            className={`nav-item ${activeSection === 'giovanna' ? 'active' : ''}`}
-          >
-            Giovanna 18/05
-          </button>
+
         </nav>
 
         <div className="sidebar-footer">
@@ -1064,207 +901,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* SECTION 4: GIOVANNA // 18/05 (ROTEIRO DA CALL) */}
-        <section 
-          id="giovanna" 
-          ref={section4Ref}
-          className={`doctrine-section ${section4InView ? 'in-view' : 'out-of-view'}`}
-        >
-          <div className="section-divider"></div>
 
-          <div className="section-header-editorial">
-            <span className="section-index">Arquivo 04 // Giovanna // 18/05</span>
-            <h2 className="section-title-editorial">Roteiro da Call — Giovanna</h2>
-            <p style={{ fontSize: '15px', lineHeight: '1.7', color: 'var(--text-secondary)', marginTop: '16px', fontWeight: 300, maxWidth: '780px' }}>
-              Duração: <strong>1h30 ~ 2h</strong> | Participantes: Você + Sócio + Giovana.
-              <br />
-              <span style={{ color: 'var(--glow-blue-solid)', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>
-                // A ideia da call NÃO é vender nada. É entender ela, o momento dela e o que realmente existe por trás da marca. Tem que parecer uma conversa inteligente e natural — não uma reunião comercial.
-              </span>
-            </p>
-          </div>
-
-          <div className="timeline-editorial">
-            {scriptBlocos.map((bloco) => (
-              <div key={bloco.num} className="chapter-editorial" style={{ gridTemplateColumns: '120px 1.2fr 2fr' }}>
-                <div>
-                  <span className="chapter-num" style={{ display: 'block' }}>Bloco {bloco.num}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)' }}>
-                    {bloco.time}
-                  </span>
-                </div>
-                <div>
-                  <span className="chapter-heading" style={{ display: 'block', marginBottom: '8px' }}>{bloco.title}</span>
-                  <p style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 300 }}>
-                    {bloco.subtext}
-                  </p>
-                </div>
-                <div className="chapter-body">
-                  
-                  {/* Actions checklist */}
-                  {bloco.actions && (
-                    <div style={{ marginBottom: '16px' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--glow-blue-solid)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px' }}>
-                        // Ações de Cockpit
-                      </span>
-                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        {bloco.actions.map((act, idx) => (
-                          <li key={idx} style={{ fontSize: '12.5px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 400 }}>
-                            <span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>
-                            {act}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Suggest Speech bubbles */}
-                  {bloco.speeches && (
-                    <div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block' }}>
-                        // Roteiro / Falas Sugeridas
-                      </span>
-                      {bloco.speeches.map((sp, idx) => (
-                        <div key={idx} style={{ backgroundColor: 'rgba(255,255,255,0.01)', borderLeft: '1px solid var(--border-color-active)', padding: '10px 14px' }}>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', color: 'var(--glow-blue-solid)', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                            {sp.author}
-                          </span>
-                          <p style={{ fontSize: '13px', color: 'var(--text-primary)', fontStyle: 'italic', fontWeight: 300, lineHeight: '1.5' }}>
-                            "{sp.text}"
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Key Questions */}
-                  {bloco.questions && (
-                    <div style={{ marginBottom: '16px' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px' }}>
-                        // Perguntas Estratégicas
-                      </span>
-                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {bloco.questions.map((q, idx) => (
-                          <li key={idx} style={{ fontSize: '13px', color: 'var(--text-primary)', display: 'flex', alignItems: 'flex-start', gap: '8px', fontWeight: 300 }}>
-                            <span style={{ color: 'var(--glow-blue-solid)', fontFamily: 'var(--font-mono)' }}>•</span>
-                            <span>{q}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Operational insights */}
-                  {bloco.insights && (
-                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.02)', paddingTop: '8px', marginTop: '12px' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8.5px', color: 'var(--glow-blue-solid)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                        Diretiva Operacional / Leitura
-                      </span>
-                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '6px' }}>
-                        {bloco.insights.map((ins, idx) => (
-                          <li key={idx} style={{ fontSize: '12.5px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 300 }}>
-                            <span style={{ width: '3px', height: '3px', backgroundColor: 'var(--text-muted)', borderRadius: '50%' }}></span>
-                            {ins}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* O QUE ANOTAR & O QUE NÃO FAZER Grid */}
-          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '60px', marginTop: '80px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--glow-blue-solid)', letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '24px' }}>
-              // PROTOCOLOS DE AVALIAÇÃO DE COCKPIT
-            </span>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '30px', marginBottom: '40px' }}>
-              
-              {/* Col 1: Mentalidade */}
-              <div style={{ backgroundColor: 'rgba(255,255,255,0.005)', border: '1px solid var(--border-color)', padding: '24px', borderRadius: '4px' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '16px' }}>
-                  1. Mentalidade (Anotar)
-                </span>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 300 }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>artista ou empresária</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>emocional ou racional</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>organizada ou caótica</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>disciplinada</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>ambiciosa</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>aberta à direção</li>
-                </ul>
-              </div>
-
-              {/* Col 2: Operação */}
-              <div style={{ backgroundColor: 'rgba(255,255,255,0.005)', border: '1px solid var(--border-color)', padding: '24px', borderRadius: '4px' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '16px' }}>
-                  2. Operação (Anotar)
-                </span>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 300 }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>quem lidera</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>quem executa</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>gargalos reais</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>dependência pessoal</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>maturidade da equipe</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>visão da operação</li>
-                </ul>
-              </div>
-
-              {/* Col 3: Mercado */}
-              <div style={{ backgroundColor: 'rgba(255,255,255,0.005)', border: '1px solid var(--border-color)', padding: '24px', borderRadius: '4px' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '16px' }}>
-                  3. Mercado (Anotar)
-                </span>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 300 }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>ticket atual</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>potencial de comunidade</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>potencial presencial</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>potencial empresarial</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>potencial de recorrência</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '4px', height: '4px', backgroundColor: 'var(--glow-blue-solid)', borderRadius: '50%' }}></span>percepção da marca</li>
-                </ul>
-              </div>
-
-            </div>
-
-            {/* O QUE NÃO FAZER (Contra-protocolo de Segurança) */}
-            <div style={{ backgroundColor: 'rgba(255, 77, 77, 0.01)', border: '1px solid rgba(255, 77, 77, 0.1)', padding: '24px', borderRadius: '4px', marginBottom: '40px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#FF4D4D', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '16px' }}>
-                // Contra-protocolo de Segurança: O QUE NÃO FAZER
-              </span>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 300 }}>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ color: '#FF4D4D' }}>❌</span> Falar mais do que ouvir</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ color: '#FF4D4D' }}>❌</span> Tentar impressionar ou ostentar métodos</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ color: '#FF4D4D' }}>❌</span> Parecer um lançador tradicional</li>
-                </ul>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ color: '#FF4D4D' }}>❌</span> Parecer uma agência de marketing genérica</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ color: '#FF4D4D' }}>❌</span> Mencionar dinheiro ou divisão comercial cedo demais</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ color: '#FF4D4D' }}>❌</span> Preencher silêncios ou tentar vender na primeira call</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* A PERGUNTA FINAL */}
-            <div style={{ backgroundColor: 'rgba(0, 82, 255, 0.02)', border: '1px solid var(--glow-blue-solid)', padding: '32px', borderRadius: '4px', textAlign: 'center' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--glow-blue-solid)', textTransform: 'uppercase', letterSpacing: '3px', display: 'block', marginBottom: '12px' }}>
-                // CRITÉRIO DE ADMISSÃO FINAL
-              </span>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 500, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-                “Vale construir uma operação ao redor dessa pessoa?”
-              </h2>
-              <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginTop: '16px' }}>
-                // VÉRTICE COCKPIT DECISORIO. APROVAÇÃO OU RECUSA ABSOLUTA.
-              </p>
-            </div>
-
-          </div>
-        </section>
 
       </main>
     </div>
