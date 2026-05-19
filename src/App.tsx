@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { Layers, Calendar, Cpu } from 'lucide-react';
 import logo from './assets/logo.png';
-import hero from './assets/hero.png';
 
 // Interfaces
 interface Chapter {
@@ -580,10 +580,21 @@ export default function App() {
         }}
       ></div>
 
+      {/* Scan technical light */}
+      <div className="scan-light"></div>
+      
+      {/* Operational energy line */}
+      <div className="operational-energy-line"></div>
+
       {/* Ultra Minimal Sidebar */}
       <aside className="sidebar">
-        <div className="brand-section" style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '60px' }}>
-          <img src={logo} alt="Vértice Logo" style={{ height: '200px', width: 'auto', alignSelf: 'flex-start', opacity: 0.95 }} />
+        <div className="brand-section">
+          <div className="logo-container">
+            <svg className="logo-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <span className="brand-title">VÉRTICE</span>
+          </div>
         </div>
 
         <nav className="nav-menu">
@@ -591,29 +602,30 @@ export default function App() {
             onClick={() => scrollToSection('processos')} 
             className={`nav-item ${activeSection === 'processos' ? 'active' : ''}`}
           >
-            Processos
+            <Layers className="nav-item-icon" />
+            <span>Processos</span>
           </button>
           
           <button 
             onClick={() => scrollToSection('cronograma')} 
             className={`nav-item ${activeSection === 'cronograma' ? 'active' : ''}`}
           >
-            Cronograma
+            <Calendar className="nav-item-icon" />
+            <span>Cronograma</span>
           </button>
 
           <button 
             onClick={() => scrollToSection('execucao')} 
             className={`nav-item ${activeSection === 'execucao' ? 'active' : ''}`}
           >
-            Execução
+            <Cpu className="nav-item-icon" />
+            <span>Execução</span>
           </button>
-
-
         </nav>
 
         <div className="sidebar-footer">
-          VÉRTICE OS<br />
-          CONFIDENCIAL // V0.1
+          VÉRTICE_SYS // V0.1<br />
+          INFRASTRUCTURE ONLINE
         </div>
       </aside>
 
@@ -621,18 +633,97 @@ export default function App() {
       <main className="cockpit-container">
         
         {/* Editorial Strategic Hero */}
-        <header className="doctrine-hero" style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', alignItems: 'flex-start' }}>
-          <div style={{ maxWidth: '640px' }}>
+        <header className="doctrine-hero">
+          <div className="hero-left">
             <span className="doctrine-label">Doutrina Operacional // V01</span>
             <h1 className="doctrine-hero-title">
-              Estrutura antes<br />de <strong>escala.</strong>
+              <span className="break-line">Estrutura</span>
+              <span className="break-line">antes</span>
+              <span className="escala-glow">de escala.</span>
             </h1>
             <p className="doctrine-hero-subtext">
-              A VÉRTICE documenta, organiza e estrutura operações digitais para experts e marcas pessoais de elite, construindo a infraestrutura invisível por trás do crescimento previsível.
+              A VÉRTICE estrutura operações digitais para experts, marcas pessoais e co-produtores que precisam transformar audiência em uma empresa previsível.
+            </p>
+            
+            <a href="#aplicar" className="cta-button-minimal">
+              [ Aplicar para a VÉRTICE ]
+            </a>
+
+            <div className="signature-micro-copy">
+              <span className="pulse-green"></span>
+              VÉRTICE_SYS // OPERATIONAL STRUCTURE ONLINE
+            </div>
+          </div>
+
+          <div className="hero-right">
+            <div className="logo-blur-wrapper">
+              <div className="logo-blur-backdrop"></div>
+              <img src={logo} className="giant-logo-glow" alt="Vértice Breathing System Logo" />
+            </div>
+          </div>
+        </header>
+
+        {/* SECTION: O QUE FAZEMOS */}
+        <section className="doctrine-section in-view">
+          <div className="section-divider"></div>
+          <div className="section-header-editorial">
+            <span className="section-index">Arquivo 00 // O que fazemos</span>
+            <h2 className="section-title-editorial">O que fazemos.</h2>
+            <p style={{ fontSize: '18px', lineHeight: '1.8', color: 'var(--text-primary)', marginTop: '24px', fontWeight: 300, maxWidth: '780px' }}>
+              Não vendemos lançamentos. Estruturamos: <strong>produto</strong>, <strong>comercial</strong>, <strong>posicionamento</strong> e <strong>operação</strong>. Para que experts consigam crescer sem depender de improviso.
             </p>
           </div>
-          <img src={hero} alt="Vértice Blueprint Layers" style={{ height: '220px', width: 'auto', opacity: 0.35, mixBlendMode: 'screen', filter: 'contrast(1.15)', marginTop: '12px', pointerEvents: 'none' }} />
-        </header>
+
+          <div className="operational-blocks-grid">
+            <div className="operational-card">
+              <span className="card-num">SYS_LAYER // 01</span>
+              <h3 className="card-title">Estrutura Comercial</h3>
+              <p className="card-text">
+                Processos de vendas, aplicação de qualificação, integrações com CRM, funis estratégicos de aquisição direta e operação comercial automatizada.
+              </p>
+            </div>
+
+            <div className="operational-card">
+              <span className="card-num">SYS_LAYER // 02</span>
+              <h3 className="card-title">Produtos & Posicionamento</h3>
+              <p className="card-text">
+                Construção estratégica de ofertas de alta conversão, esteira sequencial (escada de produtos) e engenharia de posicionamento com percepção premium.
+              </p>
+            </div>
+
+            <div className="operational-card">
+              <span className="card-num">SYS_LAYER // 03</span>
+              <h3 className="card-title">Conteúdo & Distribuição</h3>
+              <p className="card-text">
+                Estratégia editorial direcionada para autoridade inquestionável, captação constante de leads qualificados e modelo de crescimento recorrente estático.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: PARA QUEM CONSTRUÍMOS */}
+        <section className="doctrine-section in-view">
+          <div className="section-divider"></div>
+          <div className="section-header-editorial">
+            <span className="section-index">Arquivo 00 // Alvos operacionais</span>
+            <h2 className="section-title-editorial">Para quem construímos.</h2>
+          </div>
+
+          <div className="para-quem-grid">
+            <div className="para-quem-item">Experts</div>
+            <div className="para-quem-item">Marcas pessoais</div>
+            <div className="para-quem-item">Co-produtores</div>
+            <div className="para-quem-item">Operações digitais</div>
+          </div>
+
+          {/* Frase de Impacto */}
+          <div className="impact-quote-wrapper">
+            <blockquote className="impact-quote">
+              “O que parece crescimento na frente, normalmente é estrutura nos bastidores.”
+            </blockquote>
+            <span className="impact-quote-author">// VÉRTICE COCKPIT PROTOCOLS</span>
+          </div>
+        </section>
 
         {/* SECTION 1: PROCESSOS (A DOUTRINA) */}
         <section 
@@ -900,8 +991,15 @@ export default function App() {
             </p>
           </div>
         </section>
-
-
+        {/* Footer */}
+        <footer style={{ borderTop: '1px solid var(--border-color)', paddingTop: '40px', marginTop: '120px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)' }}>
+            VÉRTICE_SYS // BUILDING DIGITAL OPERATIONS
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--glow-blue-light)' }}>
+            CONFIDENCIAL // V0.1
+          </span>
+        </footer>
 
       </main>
     </div>
